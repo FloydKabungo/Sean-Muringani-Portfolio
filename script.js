@@ -16,3 +16,17 @@ dialog.querySelector('.modal-close').addEventListener('click',()=>dialog.close()
 const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('.nav');menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');});nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
 document.querySelector('#year').textContent=new Date().getFullYear();document.addEventListener('pointermove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px');});
 document.querySelector('[data-placeholder-email]').addEventListener('click',e=>{e.preventDefault();window.alert('Sean’s contact email has not been added yet. Replace YOUR-EMAIL@example.com in index.html with Sean’s actual email address to activate this button.');});
+
+// Normalize marquee speed to approximately 85 CSS pixels per second across screens.
+const tickerGroup = document.querySelector('.ticker-group');
+const tickerTrack = document.querySelector('.ticker-track');
+if (tickerGroup && tickerTrack) {
+  const updateTickerSpeed = () => {
+    const distance = tickerGroup.getBoundingClientRect().width;
+    if (distance > 0) tickerTrack.style.setProperty('--ticker-duration', `${distance / 85}s`);
+  };
+  updateTickerSpeed();
+  if ('ResizeObserver' in window) new ResizeObserver(updateTickerSpeed).observe(tickerGroup);
+  document.fonts?.ready?.then(updateTickerSpeed);
+  window.addEventListener('resize', updateTickerSpeed, {passive:true});
+}
